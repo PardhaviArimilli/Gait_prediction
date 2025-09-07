@@ -1,0 +1,27 @@
+seed: 42
+trainer:
+  epochs: 100
+  early_stop_patience: 25
+  mixed_precision: true
+optimizer:
+  name: adamw
+  lr: 0.001
+  weight_decay: 1.0e-4
+scheduler:
+  name: cosine_warmup
+  warmup_pct: 0.05
+model:
+  name: cnn_bilstm
+  num_classes: 3
+  conv_blocks: 3
+  lstm_hidden: 128
+  attention: true
+loss:
+  focal_gamma: 1.5
+  temporal_weight: 0.1
+  boundary_weight: 0.05
+sampler:
+  positive_ratio: 0.4
+  hard_negative_turning: true
+logging:
+  tracker: none

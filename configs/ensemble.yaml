@@ -1,0 +1,9 @@
+level1:
+  method: average
+level2:
+  method: weights
+  constraints:
+    non_negative: true
+    sum_to_one: true
+domain_aware:
+  enabled: true

@@ -1,0 +1,5 @@
+name: tcn
+num_classes: 3
+layers: 4
+ch: 64
+dropout: 0.2

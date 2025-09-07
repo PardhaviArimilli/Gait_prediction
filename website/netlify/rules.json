@@ -1,0 +1,20 @@
+{
+  "thresholds": {
+    "cadence": { "min": 90 },
+    "stride": { "min": 1.0 },
+    "stv": { "max": 40 },
+    "symm": { "max": 10 },
+    "turn": { "max": 3.0 }
+  },
+  "weights": {
+    "age": 1.0,
+    "cadence": 1.0,
+    "stride": 1.0,
+    "stv": 1.0,
+    "symm": 1.0,
+    "turn": 1.0
+  },
+  "risk_cut": 2.5
+}
+
+

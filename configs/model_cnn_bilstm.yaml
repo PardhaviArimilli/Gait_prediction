@@ -1,0 +1,8 @@
+name: cnn_bilstm
+num_classes: 3
+conv_blocks: 3
+kernels: [5, 9, 15]
+dilations: [1, 2, 4]
+dropout: 0.3
+lstm_hidden: 128
+attention: true

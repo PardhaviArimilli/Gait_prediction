@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+.Python
+env/
+.venv/
+venv/
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# Artifacts & logs
+artifacts/**
+!artifacts/ensemble/**
+!artifacts/oof/**
+logs/**
+
+# Kaggle dataset (large data)
+train/**
+test/**
+unlabeled/**
+unlabeled/**/*.parquet
+
+# Keep website assets (including CSV summaries) tracked
+!website/netlify/**
+
+# Node/Netlify (if any future tooling)
+node_modules/
+dist/
+build/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python caches & test artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Model checkpoints & calibrators
+*.pt
+*.pth
+*.ckpt
+*.joblib
+
+# Env/secrets
+.env
+*.env
+.python-version
+
+# Logs
+*.log
+
+

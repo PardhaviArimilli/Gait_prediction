@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Care Finder</title>
+    <style>
+      :root { --bg:#0b1220; --panel:#121a2a; --text:#e5e7eb; --muted:#94a3b8; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background: var(--bg); color: var(--text); }
+      .wrap { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+      .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h2>Nearby Care</h2>
+        <p id="status" class="muted"></p>
+        <div id="list"></div>
+      </div>
+    </div>
+    <script>
+      function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+      function render(list, items){
+        if (!items || !items.length){ list.innerHTML = '<p class="muted">No facilities found.</p>'; return; }
+        const frag = document.createDocumentFragment();
+        items.slice(0,100).forEach(it=>{
+          const d = document.createElement('div');
+          d.style.padding='10px'; d.style.borderBottom='1px solid rgba(255,255,255,0.06)';
+          d.innerHTML = `<strong>${escapeHtml(it.name)}</strong> <span class="muted">(${escapeHtml(it.amenity||'')})</span>`+
+            (it.address_line1||it.address_line2?`<div class="muted">${escapeHtml([it.address_line1,it.address_line2].filter(Boolean).join(', '))}</div>`:'')+
+            (it.phone?`<div>📞 ${escapeHtml(it.phone)}</div>`:'')+
+            (it.website?`<div><a href="${escapeHtml(it.website)}" target="_blank" rel="noopener">Website</a></div>`:'');
+          frag.appendChild(d);
+        });
+        list.innerHTML=''; list.appendChild(frag);
+      }
+      (async () => {
+        const qs = new URLSearchParams(location.search);
+        const q = qs.get('q')||''; const r = Number(qs.get('r')||10);
+        const status = document.getElementById('status');
+        const list = document.getElementById('list');
+        status.textContent = 'Searching...';
+        try {
+          const cache = await fetch('./hospitals.json', { cache: 'no-store' });
+          if (cache.ok){ const data = await cache.json(); if (data && data.results && data.results.length){ render(list, data.results); status.textContent = `Found ${data.results.length} (cached)`; return; } }
+        } catch {}
+        try {
+          const nomi = await fetch(`https://nominatim.openstreetmap.org/search?${new URLSearchParams({ q, format: 'json', limit: '1' })}`, { headers: { 'Accept': 'application/json' } });
+          const g = await nomi.json(); if (!g || !g.length) throw new Error('Location not found');
+          const { lat, lon } = g[0];
+          const query = `[out:json][timeout:25];(node["amenity"~"^(hospital|clinic|doctors|physiotherapist)$"](around:${Math.round(r*1000)},${lat},${lon});way["amenity"~"^(hospital|clinic|doctors|physiotherapist)$"](around:${Math.round(r*1000)},${lat},${lon});relation["amenity"~"^(hospital|clinic|doctors|physiotherapist)$"](around:${Math.round(r*1000)},${lat},${lon}););out center tags 100;`;
+          const over = await fetch('https://overpass-api.de/api/interpreter', { method:'POST', headers:{ 'Content-Type':'application/x-www-form-urlencoded' }, body:new URLSearchParams({ data: query }) });
+          const js = await over.json();
+          const items = (js.elements||[]).map(el=>{ const t=el.tags||{}; const center=el.center||{lat:el.lat, lon:el.lon}; return { name:t.name||t.operator||'Unnamed facility', amenity:t.amenity, phone:t.phone||t['contact:phone']||'', website:t.website||t['contact:website']||'', address_line1:[t['addr:street'],t['addr:housenumber']].filter(Boolean).join(' ')||null, address_line2:[t['addr:city']||t['addr:town']||t['addr:suburb'], t['addr:postcode']].filter(Boolean).join(' ')||null, lat:center.lat, lon:center.lon }; });
+          render(list, items); status.textContent = `Found ${items.length} (live)`;
+        } catch (e) { status.textContent = 'Search failed.'; }
+      })();
+    </script>
+  </body>
+  </html>
+
+

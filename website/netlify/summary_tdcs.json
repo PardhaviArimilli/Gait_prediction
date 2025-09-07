@@ -1,0 +1,16 @@
+{
+  "003f117e14": {
+    "StartHesitation": {
+      "count": 0,
+      "total_duration_s": 0.0
+    },
+    "Turn": {
+      "count": 0,
+      "total_duration_s": 0.0
+    },
+    "Walking": {
+      "count": 0,
+      "total_duration_s": 0.0
+    }
+  }
+}

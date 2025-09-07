@@ -1,0 +1,19 @@
+paths:
+  root: .
+  raw_train_defog: train/defog
+  raw_train_tdcs: train/tdcsfog
+  raw_unlabeled: unlabeled
+  metadata:
+    subjects: subjects.csv
+    defog: defog_metadata.csv
+    tdcs: tdcsfog_metadata.csv
+    events: events.csv
+sample_rate_hz: 100
+window_s: 5
+overlap: 0.5
+normalization: source_global_then_subject_residual
+logging:
+  dir: logs
+  level: INFO
+scorer:
+  iou: 0.5

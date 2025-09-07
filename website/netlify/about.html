@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — FOG Screening</title>
+    <style>
+      :root { --bg:#0b1220; --panel:#121a2a; --text:#e5e7eb; --muted:#94a3b8; --brand:#60a5fa; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background: var(--bg); color: var(--text); }
+      .nav { display:flex; gap:16px; align-items:center; padding:14px 22px; background: #0a1428; border-bottom:1px solid rgba(255,255,255,0.06); position: sticky; top:0; }
+      .nav a { color: var(--text); text-decoration:none; opacity:0.9; }
+      .nav .brand { font-weight:700; color: var(--brand); margin-right:12px; }
+      .wrap { max-width: 880px; margin: 24px auto; padding: 0 16px; }
+      .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+      h2 { margin-top: 0; }
+      p { color: var(--muted); line-height: 1.6; }
+      ul { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="nav" style="position:relative;">
+      <a class="brand" href="./index.html" data-i18n="brand">FOG Screening</a>
+      <a href="./index.html" data-i18n="nav_home">Home</a>
+      <a href="./about.html" data-i18n="nav_about">About</a>
+      <div class="lang-menu" style="margin-left:auto; position:relative;">
+        <button class="lang-trigger" aria-label="Language" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:#0d1627;color:#e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;">🌐</button>
+        <div class="lang-dropdown" style="display:none; position:absolute; right:0; top:46px; background:#0b1220; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:8px; box-shadow:0 10px 30px rgba(0,0,0,0.35); min-width:200px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="lang-option" data-lang="en" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇬🇧</span><span>ENG</span></button>
+            <button class="lang-option" data-lang="ar" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇦🇪</span><span>ARB</span></button>
+            <button class="lang-option" data-lang="hi" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>HIN</span></button>
+            <button class="lang-option" data-lang="te" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>TEL</span></button>
+            <button class="lang-option" data-lang="ta" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>TAM</span></button>
+            <button class="lang-option" data-lang="kn" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>KAN</span></button>
+            <button class="lang-option" data-lang="ml" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>MAL</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="banner" role="alert" style="background:#1f2937; color:#fbbf24; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <strong data-i18n="banner_title">Important:</strong>
+      <span data-i18n="banner_text">This tool is for screening only and is not medical advice. If you have urgent symptoms, contact emergency services. Please consult a clinician for diagnosis and care.</span>
+    </div>
+    <div class="wrap">
+      <div class="card">
+        <h2 data-i18n="about_title">About Gait and Parkinson's Disease</h2>
+        <p>
+          <span data-i18n="about_p1">Freezing of gait (FOG) is a brief, episodic absence or marked reduction of forward progression of the feet despite the intention to walk. It is common in Parkinson's disease (PD), particularly in advanced stages, and is linked with falls and reduced quality of life.</span>
+        </p>
+        <ul>
+          <li data-i18n="about_li1">Common triggers: turning, doorways, dual-tasking, start hesitation.</li>
+          <li data-i18n="about_li2">Key observable features: increased step time variability, reduced stride length, asymmetry, and prolonged turns.</li>
+          <li data-i18n="about_li3">This tool provides a heuristic screening based on simple thresholds and is not a diagnostic device.</li>
+        </ul>
+        <p>
+          <span data-i18n="about_p2">For the ML system in this project, wearable accelerometer data (vertical, medio-lateral, anterior–posterior axes) are used to detect FOG-related events with deep learning models. Evaluation uses cross-validation and ensembling.</span>
+        </p>
+      </div>
+    </div>
+  </body>
+  <script src="./i18n.js"></script>
+  </html>
+
+

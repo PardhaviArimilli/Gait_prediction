@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Results — FOG Screening</title>
+    <style>
+      :root { --bg:#0b1220; --panel:#121a2a; --text:#e5e7eb; --muted:#94a3b8; --brand:#60a5fa; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background: var(--bg); color: var(--text); }
+      .nav { display:flex; gap:16px; align-items:center; padding:14px 22px; background: #0a1428; border-bottom:1px solid rgba(255,255,255,0.06); position: sticky; top:0; }
+      .nav a { color: var(--text); text-decoration:none; opacity:0.9; }
+      .nav .brand { font-weight:700; color: var(--brand); margin-right:12px; }
+      .wrap { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+      .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      th { color: var(--muted); font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div class="nav" style="position:relative;">
+      <a class="brand" href="./index.html" data-i18n="brand">FOG Screening</a>
+      <a href="./index.html" data-i18n="nav_home">Home</a>
+      <a href="./about.html" data-i18n="nav_about">About</a>
+      <a href="./results.html" data-i18n="nav_results">Results</a>
+    </div>
+    <div class="wrap">
+      <div class="card">
+        <h2 data-i18n="results_title">Latest Summaries</h2>
+        <p class="muted" data-i18n="results_desc">Summaries generated from the latest inference runs.</p>
+        <h3>defog</h3>
+        <table id="tbl_defog"><thead><tr><th>file</th><th>class</th><th>count</th><th>total_duration_s</th></tr></thead><tbody></tbody></table>
+        <h3 style="margin-top:24px;">tdcsfog</h3>
+        <table id="tbl_tdcs"><thead><tr><th>file</th><th>class</th><th>count</th><th>total_duration_s</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <script>
+      async function loadCSV(path) {
+        try { const res = await fetch(path, { cache: 'no-store' }); if (!res.ok) return []; const txt = await res.text();
+          const rows = txt.trim().split(/\r?\n/).map(r => r.split(',')); const [hdr, ...data] = rows; return data.map(cols => ({ file: cols[0], class: cols[1], count: cols[2], total_duration_s: cols[3] }));
+        } catch { return []; }
+      }
+      function render(tableId, rows){ const tb = document.querySelector(`#${tableId} tbody`); tb.innerHTML=''; rows.forEach(r => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${r.file||''}</td><td>${r.class||''}</td><td>${r.count||''}</td><td>${r.total_duration_s||''}</td>`; tb.appendChild(tr); }); }
+      (async () => {
+        render('tbl_defog', await loadCSV('./summary_defog.csv'));
+        render('tbl_tdcs', await loadCSV('./summary_tdcs.csv'));
+      })();
+    </script>
+    <script src="./i18n.js"></script>
+  </body>
+  </html>
+
+

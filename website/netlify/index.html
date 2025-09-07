@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gait Screening</title>
+    <style>
+      :root { --bg:#0b1220; --panel:#121a2a; --text:#e5e7eb; --muted:#94a3b8; --brand:#60a5fa; --accent:#34d399; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+      .nav { display:flex; gap:16px; align-items:center; padding:14px 22px; background: #0a1428; border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top:0; }
+      .nav a { color: var(--text); text-decoration:none; opacity:0.9; }
+      .nav .brand { font-weight:700; color: var(--brand); margin-right:12px; }
+      .wrap { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+      .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+      label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+      input, select { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.08); background: #0d1627; color: var(--text); border-radius: 8px; }
+      input[type=range] { width: 100%; }
+      .slider-wrap { display:flex; align-items:center; gap:8px; }
+      .bubble { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.06); padding: 4px 6px; border-radius: 6px; }
+      button { padding: 10px 14px; border: 0; border-radius: 8px; background: var(--brand); color: #0b1220; cursor: pointer; font-weight: 600; }
+      .muted { color: var(--muted); font-size: 13px; }
+      .result { margin-top: 16px; font-weight: 700; color: var(--accent); }
+      .metrics { margin-top: 8px; font-size: 13px; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="nav" style="position:relative;">
+      <a class="brand" href="./index.html" data-i18n="brand">FOG Screening</a>
+      <a href="./index.html" data-i18n="nav_home">Home</a>
+      <a href="./about.html" data-i18n="nav_about">About</a>
+      <a href="./results.html" data-i18n="nav_results">Results</a>
+      <div class="lang-menu" style="margin-left:auto; position:relative;">
+        <button class="lang-trigger" aria-label="Language" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:#0d1627;color:#e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;">🌐</button>
+        <div class="lang-dropdown" style="display:none; position:absolute; right:0; top:46px; background:#0b1220; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:8px; box-shadow:0 10px 30px rgba(0,0,0,0.35); min-width:200px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="lang-option" data-lang="en" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇬🇧</span><span>ENG</span></button>
+            <button class="lang-option" data-lang="ar" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇦🇪</span><span>ARB</span></button>
+            <button class="lang-option" data-lang="hi" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>HIN</span></button>
+            <button class="lang-option" data-lang="te" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>TEL</span></button>
+            <button class="lang-option" data-lang="ta" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>TAM</span></button>
+            <button class="lang-option" data-lang="kn" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>KAN</span></button>
+            <button class="lang-option" data-lang="ml" style="display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.08);background:#0d1627;border-radius:999px;padding:6px 10px;color:#e5e7eb;cursor:pointer;"><span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111827;">🇮🇳</span><span>MAL</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="banner" role="alert" style="background:#1f2937; color:#fbbf24; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <strong data-i18n="banner_title">Important:</strong>
+      <span data-i18n="banner_text">This tool is for screening only and is not medical advice. If you have urgent symptoms, contact emergency services. Please consult a clinician for diagnosis and care.</span>
+    </div>
+
+    <div class="wrap">
+      <div class="card">
+        <h2 data-i18n="title_screening">Gait Parameter Screening</h2>
+        <p class="muted" data-i18n="desc_screening">This screening flags potential gait abnormalities via heuristic thresholds. Not a diagnosis.</p>
+
+        <div class="grid-2">
+          <div>
+            <label for="cadence" data-i18n="label_cadence">Cadence (steps/min)</label>
+            <input id="cadence" type="number" step="1" data-i18n-ph="ph_cadence" placeholder="e.g., 110" />
+            <div class="slider-wrap">
+              <input id="cadence_slider" type="range" min="60" max="160" step="1" />
+              <span id="cadence_bubble" class="bubble">—</span>
+            </div>
+          </div>
+          <div>
+            <label for="stride" data-i18n="label_stride">Stride length (m)</label>
+            <input id="stride" type="number" step="0.01" data-i18n-ph="ph_stride" placeholder="e.g., 1.2" />
+            <div class="slider-wrap">
+              <input id="stride_slider" type="range" min="0.5" max="2.0" step="0.01" />
+              <span id="stride_bubble" class="bubble">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="stv" data-i18n="label_stv">Step time variability (ms)</label>
+            <input id="stv" type="number" step="1" data-i18n-ph="ph_stv" placeholder="e.g., 35" />
+            <div class="slider-wrap">
+              <input id="stv_slider" type="range" min="0" max="100" step="1" />
+              <span id="stv_bubble" class="bubble">—</span>
+            </div>
+          </div>
+          <div>
+            <label for="symm" data-i18n="label_symm">Symmetry (% diff)</label>
+            <input id="symm" type="number" step="0.1" data-i18n-ph="ph_symm" placeholder="e.g., 6" />
+            <div class="slider-wrap">
+              <input id="symm_slider" type="range" min="0" max="50" step="0.1" />
+              <span id="symm_bubble" class="bubble">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="turn" data-i18n="label_turn">Turn duration (s)</label>
+            <input id="turn" type="number" step="0.1" data-i18n-ph="ph_turn" placeholder="e.g., 2.4" />
+            <div class="slider-wrap">
+              <input id="turn_slider" type="range" min="0.5" max="6.0" step="0.1" />
+              <span id="turn_bubble" class="bubble">—</span>
+            </div>
+          </div>
+          <div>
+            <label for="age" data-i18n="label_age">Age group</label>
+            <select id="age">
+              <option value="adult" data-i18n="age_adult">18–64</option>
+              <option value="older_65" data-i18n="age_older">65+</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="evalBtn" data-i18n="btn_evaluate">Evaluate</button>
+        <button id="genSummaryBtn" style="margin-left:8px; background:#34d399;" data-i18n="btn_summary">Generate Doctor Summary</button>
+        <div id="result" class="result"></div>
+        <div id="metrics" class="metrics"></div>
+        <div id="care" class="card" style="margin-top:16px; display:none;">
+          <h3 style="margin-top:0" data-i18n="care_title">Care Finder</h3>
+          <p class="muted" data-i18n="care_desc">Screening flagged abnormal. This is not a diagnosis. Consider consulting a clinician.</p>
+          <div class="row">
+            <div>
+              <label for="loc" data-i18n="label_loc">Your location (city, address)</label>
+              <input id="loc" type="text" data-i18n-ph="ph_loc" placeholder="e.g., Bengaluru, India" />
+            </div>
+            <div>
+              <label for="radius" data-i18n="label_radius">Radius (km)</label>
+              <input id="radius" type="number" step="1" value="10" />
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="careSearch" data-i18n="btn_care">Search nearby care</button>
+            <span id="careStatus" class="muted"></span>
+          </div>
+          <div id="careList" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" style="position:fixed; bottom:20px; right:20px; background:#111827; color:#e5e7eb; padding:10px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); display:none; z-index:9999;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="./script.js"></script>
+    <script src="./i18n.js"></script>
+  </body>
+  </html>
+
+
