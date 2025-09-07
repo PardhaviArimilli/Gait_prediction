@@ -48,6 +48,15 @@
     </div>
     <div id="toast" style="position:fixed; bottom:20px; right:20px; background:#111827; color:#e5e7eb; padding:10px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); display:none; z-index:9999;"></div>
     <script>
+      function getApiBase(){
+        try {
+          const params = new URLSearchParams(location.search);
+          const qp = params.get('api');
+          if (qp) return qp.replace(/\/$/, '');
+        } catch(e){}
+        const base = (window.API_BASE || 'http://127.0.0.1:8000').replace(/\/$/, '');
+        return base;
+      }
       async function readFileHead(file, lines = 10) {
         const text = await file.text();
         return text.split(/\r?\n/).slice(0, lines).join('\n');
@@ -71,10 +80,22 @@
         if (!f) { showToast('Select a CSV file first.'); return; }
         status.textContent = 'Uploading and predicting...';
         try {
-          const form = new FormData(); form.append('file', f);
-          const res = await fetch('http://127.0.0.1:8000/api/predict', { method: 'POST', body: form });
-          if (!res.ok) throw new Error('Request failed');
-          const data = await res.json();
+          // Try local/remote API first if provided
+          let data = null;
+          const apiBase = getApiBase();
+          if (apiBase && /^(http|https):/i.test(apiBase)){
+            try {
+              const form = new FormData(); form.append('file', f);
+              const res = await fetch(apiBase + '/api/predict', { method: 'POST', body: form });
+              if (res.ok) data = await res.json();
+            } catch(e) {
+              // fall through to client-only path
+            }
+          }
+          if (!data) {
+            const text = await f.text();
+            data = await window.__infer.windowAndPredictCSVText(text);
+          }
           out.textContent = `${data.label} — Score: ${Number(data.score||0).toFixed(3)}`;
           const probsEl = document.getElementById('probs');
           if (data.probs) {
@@ -85,10 +106,13 @@
           }
           status.textContent = '';
         } catch (e) {
-          status.textContent = 'Failed to predict. Is the local API running on :8000?';
+          status.textContent = 'Failed to predict (API and client inference both failed).';
         }
       });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js" integrity="sha256-7VbVS8RHzZz9I2q8ev3HnLf6EMiB7n642uQwD3orHhE=" crossorigin="anonymous"></script>
+    <script src="./infer.js"></script>
+    <script src="./config.js"></script>
     <script src="./i18n.js"></script>
   </body>
   </html>

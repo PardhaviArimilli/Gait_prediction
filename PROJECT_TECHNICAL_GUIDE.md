@@ -84,6 +84,7 @@ Key modules:
 - `src/data/windows.py`: windowing utilities (5 s, 50% overlap typical)
 - `src/data/transforms.py`: standardization and simple augmentations
 - `src/data/dataset.py`: `WindowDataset` yielding tensors and labels
+- `src/data/schema.py`: schema auto-detection to normalize input CSVs to 3 channels
 - `src/data/make_splits.py`, `make_splits_tdcs.py`: subject-level CV splits
 
 Typical flow:
@@ -91,6 +92,11 @@ Typical flow:
 2) Window into 5 s segments with 50% overlap.
 3) Apply transforms (e.g., per-window standardization; light jitter/scale/rotate in train only).
 4) Use GroupKFold splits by subject for CV.
+
+Notes on CSV schemas:
+- Accelerometer CSVs with `AccV`, `AccML`, `AccAP` are used directly as 3 channels.
+- Gait-parameter CSVs with columns `Cycle`, `stance_right`, `swing_right`, `stance_left`, `swing_left`, `step_length`, `step_width` are supported. If present, `Dataset` and `Normal/Parkinson's Disease` are ignored. These are normalized into 3 channels: `[step_length, step_width, stance_right - stance_left]`.
+- Fallback: first three numeric non-time columns are used if neither schema is detected.
 
 ---
 
@@ -207,6 +213,45 @@ python -m http.server 8888 -d website/netlify
 ```
 
 To deploy, use Netlify with `netlify.toml` (publish directory `website/netlify`).
+
+### Standalone browser inference (no server required)
+
+The site can run model inference entirely in the browser using ONNX Runtime Web (WASM):
+
+- Frontend logic:
+  - `website/netlify/infer.js` loads ONNX models and runs inference client-side.
+  - `website/netlify/upload.html` supports uploading CSVs in either schema (accelerometer or gait-parameters) and displays per-class probabilities.
+  - `website/netlify/i18n.js` contains Upload page strings.
+  - `website/netlify/config.js` sets `window.API_BASE` for optional remote API. If not set or unreachable, the page falls back to client-side ONNX inference automatically.
+
+- Model assets (commit/deploy with the site):
+  - `website/netlify/assets/cnn_bilstm.onnx`
+  - `website/netlify/assets/tcn.onnx`
+  - `website/netlify/assets/model.onnx` (fallback; copy of a primary model)
+  - `website/netlify/assets/weights.json` (optional, e.g. `{ "cnn_bilstm": 0.725, "tcn": 0.275 }`)
+
+- Exporting ONNX from checkpoints:
+
+```powershell
+# Create venv if needed and install deps
+py -m venv .venv
+./.venv/Scripts/python.exe -m pip install -r requirements.txt
+./.venv/Scripts/python.exe -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+./.venv/Scripts/python.exe -m pip install onnx onnxscript
+
+# Export models (adjust ckpt paths/time_len if needed)
+./.venv/Scripts/python.exe scripts/export_onnx.py --ckpt artifacts/checkpoints/cnn_bilstm_fold0_best.pt --model cnn_bilstm --out website/netlify/assets/cnn_bilstm.onnx --time_len 500
+./.venv/Scripts/python.exe scripts/export_onnx.py --ckpt artifacts/checkpoints/tcn_fold0_best.pt --model tcn --out website/netlify/assets/tcn.onnx --time_len 500
+
+# Fallback copy (used if ensemble weights not present)
+Copy-Item -Force website/netlify/assets/cnn_bilstm.onnx website/netlify/assets/model.onnx
+```
+
+- Optional hosted API usage:
+  - Set `window.API_BASE` in `website/netlify/config.js`, or open the site with `?api=https://your-api.example.com`.
+  - The page first tries the API (`/api/predict`). On failure or if not configured, it uses the browser ONNX path.
+
+This design lets Netlify host a fully static site that performs predictions client-side, while retaining the ability to switch to a remote API without redeploying the site.
 
 ---
 
