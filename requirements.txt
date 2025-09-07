@@ -4,3 +4,6 @@ pyyaml
 scikit-learn
 scipy
 pytest
+fastapi
+uvicorn
+python-multipart

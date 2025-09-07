@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from typing import Tuple, List
+from .schema import normalize_to_three_channels
 
 
 def make_windows(df: pd.DataFrame, window_s: float, overlap: float, sample_rate_hz: float,
@@ -8,7 +9,20 @@ def make_windows(df: pd.DataFrame, window_s: float, overlap: float, sample_rate_
     label_cols = label_cols or []
     step = int(window_s * sample_rate_hz)
     hop = int(step * (1.0 - overlap))
-    data = df[["AccV", "AccML", "AccAP"]].values.astype(np.float32)
+
+    # Prefer original accelerometer columns when present (training data path).
+    lower_cols = {c.lower() for c in df.columns}
+    if {"accv", "accml", "accap"}.issubset(lower_cols):
+        cols = []
+        for key in ["accv", "accml", "accap"]:
+            # find original casing
+            orig = next(c for c in df.columns if c.lower() == key)
+            cols.append(orig)
+        data = df[cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=np.float32)
+    else:
+        # Inference or alternative schema path: normalize to 3 channels
+        data = normalize_to_three_channels(df)
+
     labels_arr = df[label_cols].values.astype(np.float32) if label_cols else None
 
     X, Y = [], []

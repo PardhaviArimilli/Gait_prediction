@@ -2,6 +2,11 @@
 (function(){
   const dict = {
     en: {
+      nav_upload: 'Upload',
+      upload_title: 'Upload raw CSV',
+      upload_desc: 'Select a CSV in either format: (1) accelerometer 3-axis AccV/AccML/AccAP, or (2) gait parameters with columns Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. If present, Dataset and Normal/Parkinson\'s Disease columns are ignored.',
+      btn_preview: 'Preview',
+      btn_predict: 'Predict',
       nav_results: 'Results',
       results_title: 'Latest Summaries',
       results_desc: 'Summaries generated from the latest inference runs.',
@@ -41,6 +46,11 @@
       about_p2: 'For the ML system in this project, wearable accelerometer data (vertical, medio-lateral, anterior–posterior axes) are used to detect FOG-related events with deep learning models. Evaluation uses cross-validation and ensembling.',
     },
     ar: {
+      nav_upload: 'رفع',
+      upload_title: 'رفع ملف CSV',
+      upload_desc: 'اختر CSV بإحدى الصيغتين: (1) مقياس تسارع ثلاثي المحاور AccV/AccML/AccAP، أو (2) معلمات المشي: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. يتم تجاهل Dataset و"Normal/Parkinson\'s Disease" إن وُجدا.',
+      btn_preview: 'معاينة',
+      btn_predict: 'تنبؤ',
       nav_results: 'النتائج',
       results_title: 'الملخصات الأخيرة',
       results_desc: 'ملخصات تم إنشاؤها من أحدث عمليات الاستدلال.',
@@ -80,6 +90,11 @@
       about_p2: 'نستخدم معطيات مسرّع الحركة لاكتشاف أحداث FOG بنماذج تعلم عميق مع تحقق متقاطع وتجميع.',
     },
     hi: {
+      nav_upload: 'अपलोड',
+      upload_title: 'कच्चा CSV अपलोड करें',
+      upload_desc: 'CSV दो फॉर्मेट में से किसी एक में चुनें: (1) एक्सेलेरोमीटर 3-एक्सिस AccV/AccML/AccAP, या (2) चाल पैरामीटर: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. यदि मौजूद हों, तो Dataset और "Normal/Parkinson\'s Disease" को अनदेखा किया जाएगा.',
+      btn_preview: 'पूर्वावलोकन',
+      btn_predict: 'भविष्यवाणी',
       banner_title: 'महत्वपूर्ण:',
       banner_text: 'यह उपकरण केवल स्क्रीनिंग के लिए है और यह चिकित्सीय सलाह नहीं है। यदि आपको आपातकालीन लक्षण हैं, तो आपातकालीन सेवाओं से संपर्क करें। कृपया निदान और देखभाल के लिए चिकित्सक से परामर्श करें।',
       btn_evaluate: 'मूल्यांकन',
@@ -116,6 +131,11 @@
       about_p2: 'इस प्रोजेक्ट में पहने जाने वाले एक्सेलेरोमीटर डाटा से डीप लर्निंग द्वारा FOG घटनाओं का पता लगाया जाता है और क्रॉस-वैलिडेशन/एन्सेम्बलिंग से मूल्यांकन होता है।',
     },
     te: {
+      nav_upload: 'అప్‌లోడ్',
+      upload_title: 'RAW CSV అప్‌లోడ్ చేయండి',
+      upload_desc: 'CSV ఈ రెండు రూపాల్లో ఏదైనా ఉండవచ్చు: (1) యాక్సిలరోమీటర్ 3-అక్షాలు AccV/AccML/AccAP, లేదా (2) నడక పారామితులు: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. ఉంటే Dataset మరియు "Normal/Parkinson\'s Disease" కాలమ్‌లను నిర్లక్ష్యం చేస్తాము.',
+      btn_preview: 'ప్రివ్యూ',
+      btn_predict: 'ప్రిడిక్ట్',
       banner_title: 'ముఖ్యం:',
       banner_text: 'ఈ సాధనం స్క్రీనింగ్ కోసం మాత్రమే, ఇది వైద్య సూచన కాదు. అత్యవసర లక్షణాలు ఉంటే ఎమర్జెన్సీ సేవలకు కాల్ చేయండి. దయచేసి నిర్ధారణ మరియు సంరక్షణ కోసం వైద్యుడిని సంప్రదించండి.',
       btn_evaluate: 'మూల్యాంకనం',
@@ -152,6 +172,11 @@
       about_p2: 'ఈ ప్రాజెక్ట్‌లో ధరించే యాక్సిలరోమీటర్ డాటాతో డీప్ లెర్నింగ్ ద్వారా FOG సంఘటనలను గుర్తించి, క్రాస్-వాలిడేషన్/ఎన్సెంబ్లింగ్‌తో మదింపు చేస్తాము.',
     },
     ta: {
+      nav_upload: 'பதிவேற்று',
+      upload_title: 'RAW CSV ஐ பதிவேற்றவும்',
+      upload_desc: 'CSV இரண்டு வடிவங்களில் ஏதேனும் ஒன்றாக இருக்கலாம்: (1) ஆக்சிலரோமீட்டர் 3-அச்சு AccV/AccML/AccAP, அல்லது (2) நடை அளவுருக்கள்: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. இருந்தால் Dataset மற்றும் "Normal/Parkinson\'s Disease" பத்திகள் புறக்கணிக்கப்படும்.',
+      btn_preview: 'முன்னோட்டம்',
+      btn_predict: 'முன்கணிப்பு',
       banner_title: 'முக்கியம்:',
       banner_text: 'இந்த கருவி சோதனைக்காக மட்டுமே, இது மருத்துவ ஆலோசனை அல்ல. அவசர அறிகுறிகள் இருந்தால் அவசர சேவைகளை தொடர்பு கொள்ளவும். தயவுசெய்து மருத்துவரை சந்திக்கவும்.',
       btn_evaluate: 'மதிப்பீடு',
@@ -188,6 +213,11 @@
       about_p2: 'இந்த திட்டத்தில் அணியக்கூடிய ஆக்சிலரோமீட்டர் தரவிலிருந்து டீப் லெர்னிங் கொண்டு FOG நிகழ்வுகளை கண்டறிந்து, cross-validation மற்றும் ensemble மூலம் மதிப்பிடுகிறோம்.',
     },
     kn: {
+      nav_upload: 'ಅಪ್ಲೋಡ್',
+      upload_title: 'RAW CSV ಅಪ್ಲೋಡ್ ಮಾಡಿ',
+      upload_desc: 'CSV ಎರಡು ರೂಪಗಳಲ್ಲಿ ಯಾವುದಾದರೂ ಇರಬಹುದು: (1) ಆಕ್ಸಿಲರೋಮೀಟರ್ 3-ಅಕ್ಷ AccV/AccML/AccAP, ಅಥವಾ (2) ನಡೆ ಪರಿಮಾಣಗಳು: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. ಇದ್ದರೆ Dataset ಮತ್ತು "Normal/Parkinson\'s Disease" ಕಾಲ್ಮ್‌ಗಳನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತದೆ.',
+      btn_preview: 'ಪೂರ್ವವೀಕ್ಷಣೆ',
+      btn_predict: 'ಅಂದಾಜು',
       banner_title: 'ಮುಖ್ಯ:',
       banner_text: 'ಈ ಸಾಧನವು ತಪಾಸಣೆಗಾಗಿ ಮಾತ್ರ, ಇದು ವೈದ್ಯಕೀಯ ಸಲಹೆ ಅಲ್ಲ. ತುರ್ತು ಲಕ್ಷಣಗಳಿದ್ದರೆ ತುರ್ತು ಸೇವೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ. ದಯವಿಟ್ಟು ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ.',
       btn_evaluate: 'ಮೌಲ್ಯಮಾಪನ',
@@ -224,6 +254,11 @@
       about_p2: 'ಈ ಯೋಜನೆಯಲ್ಲಿ ಧರಿಸಬಹುದಾದ ಆಕ್ಸಿಲರೋಮೀಟರ್ ಡೇಟಾದಿಂದ ಡೀಪ್ ಲರ್ನಿಂಗ್ ಮೂಲಕ FOG ಘಟನೆಗಳನ್ನು ಪತ್ತೆ ಮಾಡಿ, ಕ್ರಾಸ್-ವ್ಯಾಲಿಡೇಶನ್/ಎನ್ಸೆಂಬ್ಲಿಂಗ್ ಮೂಲಕ ಮೌಲ್ಯಮಾಪನ ಮಾಡಲಾಗಿದೆ.',
     },
     ml: {
+      nav_upload: 'അപ്‌ലോഡ്',
+      upload_title: 'RAW CSV അപ്‌ലോഡ് ചെയ്യുക',
+      upload_desc: 'CSV രണ്ട് രൂപങ്ങളിൽ ഏതെങ്കിലും ആയിരിക്കും: (1) ആക്സിലറോമീറ്റർ 3-അക്ഷ AccV/AccML/AccAP, അല്ലെങ്കിൽ (2) നടപ്പു പാരാമീറ്ററുകൾ: Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. ഉണ്ടെങ്കിൽ Dataset, "Normal/Parkinson\'s Disease" കോളങ്ങൾ അവഗണിക്കും.',
+      btn_preview: 'പ്രീവ്യൂ',
+      btn_predict: 'പ്രവചനം',
       banner_title: 'പ്രധാന്യം:',
       banner_text: 'ഈ ഉപകരണം സ്ക്രീനിംഗിനായി മാത്രമാണ്, ഇത് മെഡിക്കൽ ഉപദേശം അല്ല. അടിയന്തര ലക്ഷണങ്ങൾ ഉണ്ടെങ്കിൽ അടിയന്തര സേവനങ്ങളെ ബന്ധപ്പെടുക. ദയവായി ഡോക്ടറെ കാണുക.',
       btn_evaluate: 'മൂല്യനിർണ്ണയം',

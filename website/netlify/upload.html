@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload — FOG Screening</title>
+    <style>
+      :root { --bg:#0b1220; --panel:#121a2a; --text:#e5e7eb; --muted:#94a3b8; --brand:#60a5fa; --accent:#34d399; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background: var(--bg); color: var(--text); }
+      .nav { display:flex; gap:16px; align-items:center; padding:14px 22px; background: #0a1428; border-bottom:1px solid rgba(255,255,255,0.06); position: sticky; top:0; }
+      .nav a { color: var(--text); text-decoration:none; opacity:0.9; }
+      .nav .brand { font-weight:700; color: var(--brand); margin-right:12px; }
+      .wrap { max-width: 880px; margin: 24px auto; padding: 0 16px; }
+      .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+      .muted { color: var(--muted); font-size: 13px; }
+      input[type=file] { width: 100%; padding: 10px; border: 1px solid rgba(255,255,255,0.08); background: #0d1627; color: var(--text); border-radius: 8px; }
+      button { padding: 10px 14px; border: 0; border-radius: 8px; background: var(--brand); color: #0b1220; cursor: pointer; font-weight: 600; }
+      .result { margin-top: 16px; font-weight: 700; color: var(--accent); }
+      .preview { margin-top: 12px; font-size: 12px; color: var(--muted); white-space: pre; background: #0d1627; border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; }
+    </style>
+  </head>
+  <body>
+    <div class="nav" style="position:relative;">
+      <a class="brand" href="./index.html" data-i18n="brand">FOG Screening</a>
+      <a href="./index.html" data-i18n="nav_home">Home</a>
+      <a href="./about.html" data-i18n="nav_about">About</a>
+      <a href="./upload.html" data-i18n="nav_upload">Upload</a>
+      <a href="./results.html" data-i18n="nav_results">Results</a>
+    </div>
+    <div id="banner" role="alert" style="background:#1f2937; color:#fbbf24; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <strong data-i18n="banner_title">Important:</strong>
+      <span data-i18n="banner_text">This tool is for screening only and is not medical advice. If you have urgent symptoms, contact emergency services. Please consult a clinician for diagnosis and care.</span>
+    </div>
+    <div class="wrap">
+      <div class="card">
+        <h2 data-i18n="upload_title">Upload raw CSV</h2>
+        <p class="muted" data-i18n="upload_desc">Select a CSV in either format: (1) accelerometer 3-axis AccV/AccML/AccAP, or (2) gait parameters Cycle, stance_right, swing_right, stance_left, swing_left, step_length, step_width. If present, Dataset and Normal/Parkinson's Disease are ignored.</p>
+        <input id="file" type="file" accept=".csv,text/csv" />
+        <div style="display:flex; gap:8px; align-items:center; margin-top:12px;">
+          <button id="previewBtn" data-i18n="btn_preview">Preview</button>
+          <button id="predictBtn" style="background:#34d399;" data-i18n="btn_predict">Predict</button>
+          <span id="status" class="muted"></span>
+        </div>
+        <div id="preview" class="preview" style="display:none;"></div>
+        <div id="prediction" class="result"></div>
+        <div id="probs" class="muted" style="margin-top:8px;"></div>
+      </div>
+    </div>
+    <div id="toast" style="position:fixed; bottom:20px; right:20px; background:#111827; color:#e5e7eb; padding:10px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); display:none; z-index:9999;"></div>
+    <script>
+      async function readFileHead(file, lines = 10) {
+        const text = await file.text();
+        return text.split(/\r?\n/).slice(0, lines).join('\n');
+      }
+      function showToast(text, ms = 3000) {
+        const el = document.getElementById('toast');
+        el.textContent = text; el.style.display = 'block';
+        clearTimeout(window.__t); window.__t = setTimeout(()=>{ el.style.display='none'; }, ms);
+      }
+      document.getElementById('previewBtn').addEventListener('click', async () => {
+        const f = document.getElementById('file').files[0];
+        const prev = document.getElementById('preview');
+        if (!f) { showToast('Select a CSV file first.'); return; }
+        prev.textContent = await readFileHead(f, 20);
+        prev.style.display = 'block';
+      });
+      document.getElementById('predictBtn').addEventListener('click', async () => {
+        const f = document.getElementById('file').files[0];
+        const status = document.getElementById('status');
+        const out = document.getElementById('prediction');
+        if (!f) { showToast('Select a CSV file first.'); return; }
+        status.textContent = 'Uploading and predicting...';
+        try {
+          const form = new FormData(); form.append('file', f);
+          const res = await fetch('http://127.0.0.1:8000/api/predict', { method: 'POST', body: form });
+          if (!res.ok) throw new Error('Request failed');
+          const data = await res.json();
+          out.textContent = `${data.label} — Score: ${Number(data.score||0).toFixed(3)}`;
+          const probsEl = document.getElementById('probs');
+          if (data.probs) {
+            const entries = Object.entries(data.probs).map(([k,v])=>`${k}: ${Number(v).toFixed(3)}`);
+            probsEl.textContent = entries.join('  |  ');
+          } else {
+            probsEl.textContent = '';
+          }
+          status.textContent = '';
+        } catch (e) {
+          status.textContent = 'Failed to predict. Is the local API running on :8000?';
+        }
+      });
+    </script>
+    <script src="./i18n.js"></script>
+  </body>
+  </html>
+
+
