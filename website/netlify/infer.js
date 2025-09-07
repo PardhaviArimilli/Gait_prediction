@@ -165,8 +165,8 @@ async function windowAndPredictCSVText(csvText){
   let probs = null;
   for (let i = 0; i < list.length; i++){
     const session = list[i];
-    const inputName = session.inputNames ? session.inputNames[0] : Object.keys(session.inputNames || {})[0];
-    const outputName = session.outputNames ? session.outputNames[0] : undefined;
+    const inputName = (session.inputNames && session.inputNames[0]) || (Object.keys(session.inputNames || { input: true })[0]) || 'input';
+    const outputName = (session.outputNames && session.outputNames[0]) || undefined;
     const outputs = await session.run({ [inputName]: tensor });
     const out = outputName ? outputs[outputName] : Object.values(outputs)[0];
     const logits = Array.from(out.data);

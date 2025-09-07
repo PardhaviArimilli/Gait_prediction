@@ -49,7 +49,7 @@ def main():
     p = argparse.ArgumentParser(description="Export PyTorch checkpoint to ONNX for web inference")
     p.add_argument("--ckpt", required=True, help="Path to .pt checkpoint")
     p.add_argument("--model", default="cnn_bilstm", help="Model name: cnn_bilstm or tcn")
-    p.add_argument("--out", default="website/netlify/assets/model.onnx", help="Output ONNX path")
+    p.add_argument("--out", default="giwebsite/netlify/assets/model.onnx", help="Output ONNX path")
     p.add_argument("--time_len", type=int, default=500, help="Dummy sequence length for export")
     args = p.parse_args()
     export(args.ckpt, args.model, args.out, time_len=args.time_len)
